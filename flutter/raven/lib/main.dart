@@ -40,12 +40,12 @@ class Test extends StatefulWidget {
 }
 
 class _Test extends State<Test> {
-  late Future<http.Response> info;
+  /*late Future<http.Response> info;*/
 
   @override
   void initState() {
     super.initState();
-    info = getInformation();
+    //info = getInformation();
   }
 
   @override
@@ -78,4 +78,16 @@ Future<http.Response> getInformation() async {
     // then throw an exception.
     throw Exception('Failed to load album');
   }*/
+}
+
+class Enterprises {
+  final String name;
+
+  Enterprises(this.name);
+
+  Enterprises.fromJson(Map<String, dynamic> json) : name = json['name'];
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+      };
 }
