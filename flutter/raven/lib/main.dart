@@ -45,7 +45,7 @@ class _MainPage extends State<MainPage> {
       body: TextButton(
         child: Text("Send request"),
         onPressed: () async {
-            var response = await DBManager().getInfo();
+            Response response = await DBManager().getInfo();
             debugPrint(response.body);
           },
       ),);
