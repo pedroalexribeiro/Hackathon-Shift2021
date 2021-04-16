@@ -223,6 +223,9 @@ Thumbs.db
 *.code-workspace
 
 ### Flutter ###
+
+flutter/raven/pubspec.lock
+flutter/raven/.metadata
 # Miscellaneous
 *.class
 *.log
