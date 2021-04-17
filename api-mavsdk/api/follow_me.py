@@ -1,68 +1,97 @@
 #!/usr/bin/env python3
 
-#This example shows how to use the follow me plugin
-
 import asyncio
+
 from mavsdk import System
-from mavsdk.follow_me import (Config, FollowMeError, TargetLocation)
+from mavsdk.mission import (MissionItem, MissionPlan)
+from mavsdk.param import Param
 
-default_height = 8.0 #in Meters
-follow_distance = 2.0 #in Meters, this is the distance that the drone will remain away from Target while following it 
-#Direction relative to the Target 
-#Options are NONE, FRONT, FRONT_LEFT, FRONT_RIGHT, BEHIND
-direction = Config.FollowDirection.BEHIND
-responsiveness =  0.02
 
-#This list contains fake location coordinates (These coordinates are obtained from mission.py example)
-fake_location = [[47.398039859999997,8.5455725400000002],[47.398036222362471,8.5450146439425509],[47.397825620791885,8.5450092830163271]]
-
-async def fly_drone():
+async def run():
     drone = System()
     await drone.connect(system_address="udp://:14540")
-    
-    #This waits till a mavlink based drone is connected
+
+    await drone.param.set_param_float("MIS_DIST_1WP", 10000)
+    await drone.param.set_param_float("MIS_DIST_WPS", 10000)
+
+    print("Waiting for drone to connect...")
     async for state in drone.core.connection_state():
         if state.is_connected:
-            print(f"-- Connected to drone with UUID: {state.uuid}")
+            print(f"Drone discovered with UUID: {state.uuid}")
             break
-    
-    #Checking if Global Position Estimate is ok
-    async for global_lock in drone.telemetry.health():
-        if global_lock.is_global_position_ok:
-            print("-- Global position state is good enough for flying.")
-            break
-    
-    #Arming the drone
-    print ("-- Arming")
-    await drone.action.arm()
-    
-    #Follow me Mode requires some configuration to be done before starting the mode
-    conf = Config(default_height, follow_distance, direction, responsiveness)
-    await drone.follow_me.set_config(conf)
-    
-    print ("-- Taking Off")
-    await drone.action.takeoff()
-    await asyncio.sleep(8)
-    print ("-- Starting Follow Me Mode")
-    await drone.follow_me.start()
-    await asyncio.sleep(8)
 
-    #This for loop provides fake coordinates from the fake_location list for the follow me mode to work
-    #In a simulator it won't make much sense though
-    for latitude,longitude in fake_location:
-        target = TargetLocation(latitude, longitude, 0, 0, 0, 0)
-        print ("-- Following Target")
-        await drone.follow_me.set_target_location(target)
-        await asyncio.sleep(2)
-    
-    #Stopping the follow me mode
-    print ("-- Stopping Follow Me Mode")
-    await drone.follow_me.stop()
-    await asyncio.sleep(5)
-    
-    print ("-- Landing")
-    await drone.action.land()
+    print_mission_progress_task = asyncio.ensure_future(print_mission_progress(drone))
+
+    running_tasks = [print_mission_progress_task]
+    termination_task = asyncio.ensure_future(observe_is_in_air(drone, running_tasks))
+
+    mission_items = []
+    mission_items.append(MissionItem(40.194650,
+                                     -8.408660,
+                                     25,
+                                     10,
+                                     True,
+                                     float('nan'),
+                                     float('nan'),
+                                     MissionItem.CameraAction.NONE,
+                                     float('nan'),
+                                     float('nan')))
+    mission_items.append(MissionItem(40.20564,
+                                     -8.41955,
+                                     25,
+                                     10,
+                                     True,
+                                     float('nan'),
+                                     float('nan'),
+                                     MissionItem.CameraAction.NONE,
+                                     float('nan'),
+                                     float('nan')))
+
+    mission_plan = MissionPlan(mission_items)
+
+    await drone.mission.set_return_to_launch_after_mission(True)
+
+    print("-- Uploading mission")
+    await drone.mission.upload_mission(mission_plan)
+
+    print("-- Arming")
+    await drone.action.arm()
+
+    print("-- Starting mission")
+    await drone.mission.start_mission()
+
+    await termination_task
+
+
+async def print_mission_progress(drone):
+    async for mission_progress in drone.mission.mission_progress():
+        print(f"Mission progress: "
+              f"{mission_progress.current}/"
+              f"{mission_progress.total}")
+
+
+async def observe_is_in_air(drone, running_tasks):
+    """ Monitors whether the drone is flying or not and
+    returns after landing """
+
+    was_in_air = False
+
+    async for is_in_air in drone.telemetry.in_air():
+        if is_in_air:
+            was_in_air = is_in_air
+
+        if was_in_air and not is_in_air:
+            for task in running_tasks:
+                task.cancel()
+                try:
+                    await task
+                except asyncio.CancelledError:
+                    pass
+            await asyncio.get_event_loop().shutdown_asyncgens()
+
+            return
+
 
 if __name__ == "__main__":
     loop = asyncio.get_event_loop()
-    loop.run_until_complete(fly_drone())
+    loop.run_until_complete(run())
