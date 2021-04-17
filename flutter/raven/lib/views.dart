@@ -4,6 +4,54 @@ import 'package:raven/db_manager.dart';
 import 'package:raven/models.dart';
 import 'package:raven/partials.dart';
 
+class LoginView extends StatefulWidget {
+  LoginView({Key key});
+
+  _LoginView createState() => _LoginView();
+}
+
+class _LoginView extends State<LoginView> {
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+
+          TextField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Username',
+            ),
+          ),
+
+          TextField(
+            obscureText: true,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Password',
+            ),
+          ),
+
+          TextButton(
+            child: Text("Login"),
+            onPressed: () {
+              Navigator.pushNamed(
+                context,
+                '/shops',
+              );
+            },
+          )
+
+        ],
+      )
+    );
+  }
+
+}
+
 class ShopsView extends StatefulWidget {
   List<Enterprise> shops = [];
 
@@ -54,7 +102,8 @@ class _ShopsView extends State<ShopsView> {
               },
             )
           ],
-        ));
+        )
+      );
   }
 
   void goToItems() {
@@ -138,7 +187,7 @@ class _CheckoutView extends State<ItemsView> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Buy"),
+          title: Text("Cart"),
         ),
         body: Column(
           children: [

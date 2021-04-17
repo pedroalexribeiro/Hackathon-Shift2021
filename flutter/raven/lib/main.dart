@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:raven/mr_manager.dart';
 import 'package:raven/views.dart';
 
 void main() {
+  MrManager mr = MrManager();
+
   runApp(MainApp());
 }
 
@@ -14,11 +17,10 @@ class MainApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: '/shops',
+      initialRoute: '/login',
       routes: {
-        // When navigating to the "/" route, build the FirstScreen widget.
+        '/login': (context) => LoginView(),
         '/shops': (context) => ShopsView(),
-        // When navigating to the "/second" route, build the SecondScreen widget.
         '/items': (context) => ItemsView(),
         '/checkout': (context) => CheckoutView(),
       },
