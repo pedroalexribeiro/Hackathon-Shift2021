@@ -6,7 +6,6 @@ void main() {
 }
 
 class MainApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -21,8 +20,8 @@ class MainApp extends StatelessWidget {
         '/shops': (context) => ShopsView(),
         // When navigating to the "/second" route, build the SecondScreen widget.
         '/items': (context) => ItemsView(),
+        '/checkout': (context) => CheckoutView(),
       },
     );
   }
-
 }
