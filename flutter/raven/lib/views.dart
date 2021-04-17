@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:raven/db_manager.dart';
 import 'package:raven/models.dart';
+import 'package:raven/mr_manager.dart';
 import 'package:raven/partials.dart';
 import 'package:raven/theme_colors.dart';
 
@@ -12,7 +13,6 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginView extends State<LoginView> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,13 +65,23 @@ class _LoginView extends State<LoginView> {
       )
     );
   }
-
 }
 
 class ShopsView extends StatefulWidget {
+  final MrManager mr;
+
+  ShopsView({this.mr});
+
+  @override
+  _ShopsView createState() => _ShopsView();
+}
+
+class _ShopsView extends State<ShopsView> {
   List<Enterprise> shops = [];
 
-  ShopsView({Key key}) {
+  @override
+  void initState() {
+    super.initState();
     shops = [
       Enterprise(
           name: 'Continente',
@@ -82,75 +92,77 @@ class ShopsView extends StatefulWidget {
   }
 
   @override
-  _ShopsView createState() => _ShopsView();
-}
-
-class _ShopsView extends State<ShopsView> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Raven - Heaven's Courier"),
-        ),
-        body: Column(
-          children: [
-            TextButton(
-              child: Text("Send request"),
-              onPressed: () async {
-                Response response = await DBManager().getInfo();
-                debugPrint(response.body);
-              },
-            ),
-            ListView.builder(
-              scrollDirection: Axis.vertical,
-              shrinkWrap: true,
-              itemCount: widget.shops.length,
-              itemBuilder: (context, index) {
-                return ListViewRow(
-                    title: widget.shops[index].name,
-                    imageUrl: widget.shops[index].imageUrl,
-                    callback: goToItems);
-              },
-            )
-          ],
-        )
-      );
+      appBar: AppBar(
+        title: Text("Raven - Heaven's Courier"),
+      ),
+      body: Column(
+        children: [
+          TextButton(
+            child: Text("Send request"),
+            onPressed: () async {
+              Response response = await DBManager().getInfo();
+              debugPrint(response.body);
+            },
+          ),
+          ListView.builder(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            itemCount: shops.length,
+            itemBuilder: (context, index) {
+              return ListViewRow(
+                  title: shops[index].name,
+                  imageUrl: shops[index].imageUrl,
+                  callback: goToItems);
+            },
+          )
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(
+            context,
+            '/checkout',
+            arguments: CheckoutView(mr: widget.mr),
+          );
+        },
+        child: const Icon(Icons.shopping_cart),
+        backgroundColor: Colors.green,
+      ),
+    );
   }
 
   void goToItems() {
     Navigator.pushNamed(
       context,
       '/items',
-      //arguments: PokemonArgs(pokemon),
+      arguments: CheckoutView(mr: widget.mr),
     );
   }
 }
 
 class ItemsView extends StatefulWidget {
-  List<Item> items = [];
+  final MrManager mr;
 
-  ItemsView({Key key}) {
-    items = [
-      Item(
-          name: 'bread',
-          imageUrl:
-              'https://thecreativecrops.com/wp-content/uploads/2018/06/01_breadRoll_semmel02_p01.jpg'),
-    ];
-  }
+  ItemsView({this.mr});
 
   @override
   _ItemsView createState() => _ItemsView();
 }
 
 class _ItemsView extends State<ItemsView> {
+  List<Item> items = [];
+
   @override
   void initState() {
     super.initState();
+    items = [
+      Item(
+          name: 'bread',
+          imageUrl:
+              'https://thecreativecrops.com/wp-content/uploads/2018/06/01_breadRoll_semmel02_p01.jpg'),
+    ];
   }
 
   @override
@@ -164,11 +176,11 @@ class _ItemsView extends State<ItemsView> {
             ListView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
-              itemCount: widget.items.length,
+              itemCount: items.length,
               itemBuilder: (context, index) {
                 return ListViewRow(
-                  title: widget.items[index].name,
-                  imageUrl: widget.items[index].imageUrl,
+                  title: items[index].name,
+                  imageUrl: items[index].imageUrl,
                 );
               },
             )
@@ -178,22 +190,17 @@ class _ItemsView extends State<ItemsView> {
 }
 
 class CheckoutView extends StatefulWidget {
-  List<Item> items = [];
+  final MrManager mr;
 
-  CheckoutView({Key key}) {
-    items = [
-      Item(
-          name: 'bread',
-          imageUrl:
-              'https://thecreativecrops.com/wp-content/uploads/2018/06/01_breadRoll_semmel02_p01.jpg'),
-    ];
-  }
+  CheckoutView({this.mr});
 
   @override
   _CheckoutView createState() => _CheckoutView();
 }
 
 class _CheckoutView extends State<ItemsView> {
+  List<Item> items = [];
+
   @override
   void initState() {
     super.initState();
@@ -210,11 +217,11 @@ class _CheckoutView extends State<ItemsView> {
             ListView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
-              itemCount: widget.items.length,
+              itemCount: items.length,
               itemBuilder: (context, index) {
                 return ListViewRow(
-                  title: widget.items[index].name,
-                  imageUrl: widget.items[index].imageUrl,
+                  title: items[index].name,
+                  imageUrl: items[index].imageUrl,
                 );
               },
             )
