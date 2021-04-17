@@ -6,10 +6,13 @@ import 'package:raven/mr_manager.dart';
 void main() {
   MrManager mr = MrManager();
 
-  runApp(MainApp());
+  runApp(MainApp(mr: mr));
 }
 
 class MainApp extends StatelessWidget {
+  final MrManager mr;
+  MainApp({this.mr});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -21,9 +24,9 @@ class MainApp extends StatelessWidget {
       initialRoute: '/login',
       routes: {
         '/login': (context) => LoginView(),
-        '/shops': (context) => ShopsView(),
-        '/items': (context) => ItemsView(),
-        '/checkout': (context) => CheckoutView(),
+        '/shops': (context) => ShopsView(mr: mr),
+        '/items': (context) => ItemsView(mr: mr),
+        '/checkout': (context) => CheckoutView(mr: mr),
       },
     );
   }

@@ -7,6 +7,10 @@ class MrManager {
     shoppingCartItems = [];
   }
 
+  List<Item> getItems() {
+    return shoppingCartItems;
+  }
+
   void addToCart(Item item) {
     shoppingCartItems.add(item);
   }
