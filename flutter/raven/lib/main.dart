@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:raven/views.dart';
+import 'package:raven/mr_manager.dart';
 
 void main() {
   runApp(MainApp());
