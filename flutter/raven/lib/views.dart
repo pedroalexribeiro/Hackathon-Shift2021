@@ -3,6 +3,7 @@ import 'package:http/http.dart';
 import 'package:raven/db_manager.dart';
 import 'package:raven/models.dart';
 import 'package:raven/partials.dart';
+import 'package:raven/theme_colors.dart';
 
 class LoginView extends StatefulWidget {
   LoginView({Key key});
@@ -20,29 +21,44 @@ class _LoginView extends State<LoginView> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
 
-          TextField(
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Username',
+          Padding(
+            padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+            child: TextField(
+              decoration: InputDecoration(
+                labelText: 'Username',
+                prefixIcon: Icon(Icons.person),
+              ),
             ),
           ),
 
-          TextField(
-            obscureText: true,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Password',
-            ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+            child: TextField(
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'Password',
+                prefixIcon: Icon(Icons.lock),
+              ),
+            )
           ),
 
-          TextButton(
-            child: Text("Login"),
-            onPressed: () {
-              Navigator.pushNamed(
-                context,
-                '/shops',
-              );
-            },
+          Padding(
+            padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(minWidth: double.infinity),
+              child: TextButton(
+                child: Text("Login",
+                  style: TextStyle(color: ThemeColors.light),
+                ),
+                style: ButtonStyle(backgroundColor: MaterialStateProperty.all(ThemeColors.dark)),
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    '/shops',
+                  );
+                },
+              )
+            ),
           )
 
         ],

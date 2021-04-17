@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:raven/mr_manager.dart';
+import 'package:raven/theme_colors.dart';
 import 'package:raven/views.dart';
 import 'package:raven/mr_manager.dart';
 
@@ -15,7 +16,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       title: "Raven - Heaven's Courier",
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: ThemeColors.dark,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       initialRoute: '/login',
