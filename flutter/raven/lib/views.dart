@@ -4,11 +4,11 @@ import 'package:raven/db_manager.dart';
 import 'package:raven/models.dart';
 import 'package:raven/partials.dart';
 
-class ShopsPage extends StatefulWidget {
+class ShopsView extends StatefulWidget {
 
   List<Enterprise> shops = [];
 
-  ShopsPage({Key key}) {
+  ShopsView({Key key}) {
 
     shops = [
       Enterprise(
@@ -22,10 +22,10 @@ class ShopsPage extends StatefulWidget {
   }
 
   @override
-  _ShopsPage createState() => _ShopsPage();
+  _ShopsView createState() => _ShopsView();
 }
 
-class _ShopsPage extends State<ShopsPage> {
+class _ShopsView extends State<ShopsView> {
 
   @override
   void initState() {
@@ -68,26 +68,26 @@ class _ShopsPage extends State<ShopsPage> {
   }
 }
 
-class ItemsPage extends StatefulWidget {
+class ItemsView extends StatefulWidget {
 
   List<Item> items = [];
 
-  ItemsPage({Key key}) {
+  ItemsView({Key key}) {
 
     items = [
       Item(
         name: 'bread',
-        imageUrl: 'https://pics.clipartpng.com/Bread_PNG_Clip_Art-2218.png'
+        imageUrl: 'https://thecreativecrops.com/wp-content/uploads/2018/06/01_breadRoll_semmel02_p01.jpg'
       ),
     ];
 
   }
 
   @override
-  _ItemsPage createState() => _ItemsPage();
+  _ItemsView createState() => _ItemsView();
 }
 
-class _ItemsPage extends State<ItemsPage> {
+class _ItemsView extends State<ItemsView> {
 
   @override
   void initState() {

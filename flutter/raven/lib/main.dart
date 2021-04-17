@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:raven/pages.dart';
+import 'package:raven/views.dart';
 
 void main() {
   runApp(MainApp());
@@ -15,7 +15,13 @@ class MainApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: ShopsPage(),
+      initialRoute: '/shops',
+      routes: {
+        // When navigating to the "/" route, build the FirstScreen widget.
+        '/shops': (context) => ShopsView(),
+        // When navigating to the "/second" route, build the SecondScreen widget.
+        '/items': (context) => ItemsView(),
+      },
     );
   }
 
