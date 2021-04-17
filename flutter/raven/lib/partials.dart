@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 class ListViewRow extends StatelessWidget {
 
   final String title, imageUrl;
+  final Function callback;
 
-  ListViewRow({this.title, this.imageUrl});
+  ListViewRow({this.title, this.imageUrl, this.callback});
   
   @override
   Widget build(BuildContext context) {
@@ -26,15 +27,11 @@ class ListViewRow extends StatelessWidget {
 
           ],
         ),
-        onPressed: () {
-          Navigator.pushNamed(
-            context,
-            '/items',
-            //arguments: PokemonArgs(pokemon),
-          );
-        },
+        
+        onPressed: () => this.callback != null ? this.callback() : doNothing()
       )
     );
   }
 
+  void doNothing() {}
 }

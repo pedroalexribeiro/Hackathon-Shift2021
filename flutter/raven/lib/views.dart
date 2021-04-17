@@ -58,6 +58,7 @@ class _ShopsView extends State<ShopsView> {
               return ListViewRow(
                 title: widget.shops[index].name,
                 imageUrl: widget.shops[index].imageUrl,
+                callback: goToItems
               );
             },
           )
@@ -65,6 +66,13 @@ class _ShopsView extends State<ShopsView> {
         ],
       )
       );
+  }
+
+  void goToItems() {
+    Navigator.pushNamed(context,
+      '/items',
+      //arguments: PokemonArgs(pokemon),
+    );
   }
 }
 
@@ -120,4 +128,5 @@ class _ItemsView extends State<ItemsView> {
       )
       );
   }
+
 }
