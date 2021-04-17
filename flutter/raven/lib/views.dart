@@ -116,7 +116,7 @@ class _ShopsView extends State<ShopsView> {
     Navigator.pushNamed(
       context,
       '/items',
-      //arguments: PokemonArgs(pokemon),
+      arguments: CheckoutView(mr: widget.mr),
     );
   }
 }
