@@ -13,9 +13,9 @@ async def run(lat, lon):
 
     await drone.param.set_param_float("MIS_DIST_1WP", 10000)
     await drone.param.set_param_float("MIS_DIST_WPS", 10000)
-    await drone.param.set_param_float("MPC_JERK_MAX", 30)
+    # await drone.param.set_param_float("MPC_JERK_MAX", 30)
 
-    await drone.action.set_maximum_speed(20)
+    # await drone.action.set_maximum_speed(20)
 
     print("Waiting for drone to connect...")
     async for state in drone.core.connection_state():
@@ -55,7 +55,7 @@ async def run(lat, lon):
 
     #await drone.mission.is_mission_finished()
 
-    print("-- Landing")
+    # print("-- Landing")
     #await drone.action.land()
 
     await termination_task

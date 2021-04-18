@@ -23,7 +23,7 @@ def request(request):
     enterprise = get_object_or_404(Enterprise, id=enterprise_id)
     
     result = fly_test.delay(Decimal(enterprise.lat), Decimal(enterprise.lon))
-    return Response()
+    return Response('Buenos dias')
 
 @api_view(['POST'])
 def go_home(request):
