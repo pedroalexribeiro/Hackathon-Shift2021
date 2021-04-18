@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:raven/models.dart';
 
 class ListViewRow extends StatelessWidget {
 
   final String title, imageUrl;
-  final Function callback;
+  final Function callback, callbackOnAdd;
 
-  ListViewRow({this.title, this.imageUrl, this.callback});
+  ListViewRow({this.title, this.imageUrl, this.callback, this.callbackOnAdd});
   
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,22 @@ class ListViewRow extends StatelessWidget {
                 ),
               ),
 
-            Text(this.title),
+            Expanded(
+              child: Text(this.title),
+            ),
+
+            if(callbackOnAdd != null)
+              MaterialButton(
+                onPressed: () => this.callbackOnAdd(),
+                color: Colors.green,
+                textColor: Colors.white,
+                child: Icon(
+                  Icons.add,
+                  size: 20,
+                ),
+                padding: EdgeInsets.all(16),
+                shape: CircleBorder(),
+              )
 
           ],
         ),
@@ -35,3 +51,40 @@ class ListViewRow extends StatelessWidget {
 
   void doNothing() {}
 }
+
+class ListViewMultipleRow extends StatelessWidget {
+
+  final Item item;
+  final int quantity;
+
+  ListViewMultipleRow({this.item, this.quantity});
+  
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Row(
+        children: [
+
+          if(item.imageUrl != null)
+            Padding(
+              padding: EdgeInsets.all(16),
+              child: Image.network(
+                item.imageUrl,
+                width: 64,
+              ),
+            ),
+
+          Expanded(
+            child: Text(item.name),
+          ),
+
+          Text('X $quantity')
+
+        ],
+      ),
+    );
+  }
+
+  void doNothing() {}
+}
+

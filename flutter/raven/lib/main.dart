@@ -25,8 +25,8 @@ class MainApp extends StatelessWidget {
       routes: {
         '/login': (context) => LoginView(),
         '/shops': (context) => ShopsView(mr: mr),
-        '/items': (context) => ItemsView(mr: mr),
         '/checkout': (context) => CheckoutView(mr: mr),
+        '/start-trip': (context) => DroneTakeOffView()
       },
     );
   }
