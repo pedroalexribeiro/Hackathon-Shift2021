@@ -1,22 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:raven/pages.dart';
+import 'package:raven/mr_manager.dart';
+import 'package:raven/theme_colors.dart';
+import 'package:raven/views.dart';
 
 void main() {
-  runApp(MainApp());
+  MrManager mr = MrManager();
+
+  runApp(MainApp(mr: mr));
 }
 
 class MainApp extends StatelessWidget {
+  final MrManager mr;
+  MainApp({this.mr});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Raven - Heaven's Courier",
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: ThemeColors.dark,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MainPage(),
+      initialRoute: '/login',
+      routes: {
+        '/login': (context) => LoginView(),
+        '/shops': (context) => ShopsView(mr: mr),
+        '/items': (context) => ItemsView(mr: mr),
+        '/checkout': (context) => CheckoutView(mr: mr),
+      },
     );
   }
-
 }
