@@ -29,5 +29,6 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('admin/', admin.site.urls),
     path('raven', views.enterpriseList, name='list'),
-    path('requests', views.request, name='request')
+    path('requests', views.request, name='request'),
+    path('go_home', views.go_home, name='go_home'),
 ]
