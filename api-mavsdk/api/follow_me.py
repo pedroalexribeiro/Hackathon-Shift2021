@@ -5,14 +5,17 @@ import asyncio
 from mavsdk import System
 from mavsdk.mission import (MissionItem, MissionPlan)
 from mavsdk.param import Param
+from decimal import Decimal
 
-
-async def run():
+async def run(lat, lon):
     drone = System()
     await drone.connect(system_address="udp://:14540")
 
     await drone.param.set_param_float("MIS_DIST_1WP", 10000)
     await drone.param.set_param_float("MIS_DIST_WPS", 10000)
+    # await drone.param.set_param_float("MPC_JERK_MAX", 30)
+
+    # await drone.action.set_maximum_speed(20)
 
     print("Waiting for drone to connect...")
     async for state in drone.core.connection_state():
@@ -26,18 +29,8 @@ async def run():
     termination_task = asyncio.ensure_future(observe_is_in_air(drone, running_tasks))
 
     mission_items = []
-    mission_items.append(MissionItem(40.194650,
-                                     -8.408660,
-                                     25,
-                                     10,
-                                     True,
-                                     float('nan'),
-                                     float('nan'),
-                                     MissionItem.CameraAction.NONE,
-                                     float('nan'),
-                                     float('nan')))
-    mission_items.append(MissionItem(40.20564,
-                                     -8.41955,
+    mission_items.append(MissionItem(Decimal(lat),
+                                     Decimal(lon),
                                      25,
                                      10,
                                      True,
@@ -60,8 +53,12 @@ async def run():
     print("-- Starting mission")
     await drone.mission.start_mission()
 
-    await termination_task
+    #await drone.mission.is_mission_finished()
 
+    # print("-- Landing")
+    #await drone.action.land()
+
+    await termination_task
 
 async def print_mission_progress(drone):
     async for mission_progress in drone.mission.mission_progress():
